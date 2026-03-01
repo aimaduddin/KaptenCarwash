@@ -1,9 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Livewire\BookingWizard;
 
 // Public routes
 Route::get('/', fn () => view('pages.home'))->name('home');
+
+Route::get('/book', BookingWizard::class)->name('book');
 
 // Admin routes (protected)
 Route::middleware(['auth'])->group(function () {
