@@ -12,7 +12,7 @@ use Livewire\Component;
 
 class Dashboard extends Component
 {
-    public function render(): View
+    public function render()
     {
         // Stats
         $totalBookings = Booking::count();
