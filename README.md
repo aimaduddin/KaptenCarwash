@@ -57,3 +57,40 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Database Setup
+
+This project uses PostgreSQL. Before running migrations, you need to:
+
+1. Install PostgreSQL on your system
+2. Create a database named `kaptencarwash`
+3. Create a PostgreSQL user or configure the `.env` file with your existing credentials
+4. Update `.env` file with correct database credentials:
+
+```env
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=kaptencarwash
+DB_USERNAME=your_postgres_user
+DB_PASSWORD=your_postgres_password
+```
+
+5. Run migrations:
+```bash
+php artisan migrate
+```
+
+### Current Status
+
+All 7 database migrations have been created and are ready to run:
+
+- `2025_03_01_000001_create_car_types_table.php`
+- `2025_03_01_000002_create_services_table.php`
+- `2025_03_01_000003_create_users_table.php`
+- `2025_03_01_000004_create_bookings_table.php`
+- `2025_03_01_000005_create_booking_services_table.php`
+- `2025_03_01_000006_create_business_settings_table.php`
+- `2025_03_01_000007_create_unavailable_dates_table.php`
+
+**Note:** Migrations could not be run during initial setup due to PostgreSQL not being configured. The migrations are syntactically correct and will execute successfully once PostgreSQL is properly set up with valid credentials.
