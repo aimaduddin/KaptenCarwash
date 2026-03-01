@@ -65,7 +65,7 @@ class BookingList extends Component
         $booking->save();
     }
 
-    public function render(): View
+    public function render()
     {
         return view('livewire.admin.booking-list', [
             'bookings' => $this->bookings,
