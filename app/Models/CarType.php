@@ -6,13 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class User extends Model
+class CarType extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'name',
-        'phone',
+        'price_multiplier',
+    ];
+
+    protected $casts = [
+        'price_multiplier' => 'decimal:2',
     ];
 
     public function bookings(): HasMany
