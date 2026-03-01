@@ -15,8 +15,6 @@ class BookingList extends Component
     public $statusFilter = 'all';
     public $dateFilter = null;
     public $bookings;
-
-    protected $queryString = [
         'status' => ['all', 'confirmed', 'in_progress', 'completed', 'cancelled'],
     'sort' => ['booking_time', 'date'],
     'per_page' => 20,
