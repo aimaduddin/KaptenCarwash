@@ -2,8 +2,6 @@
 
 namespace Tests\Unit;
 
-use App\Models\CarType;
-use App\Models\Service;
 use App\Services\AvailabilityService;
 use Tests\TestCase;
 

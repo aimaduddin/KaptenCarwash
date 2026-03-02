@@ -8,10 +8,15 @@ use Livewire\Component;
 class UnavailableDatesManager extends Component
 {
     public $dates = [];
+
     public $newDate = '';
+
     public $newReason = '';
+
     public $adding = false;
+
     public $deletingId = null;
+
     public $error = null;
 
     public function mount(): void
@@ -21,8 +26,9 @@ class UnavailableDatesManager extends Component
 
     public function addDate(): void
     {
-        if (!$this->newDate) {
+        if (! $this->newDate) {
             $this->error = 'Please select a date';
+
             return;
         }
 
@@ -34,6 +40,7 @@ class UnavailableDatesManager extends Component
             if ($existing) {
                 $this->error = 'This date is already blocked';
                 $this->adding = false;
+
                 return;
             }
 
@@ -43,8 +50,8 @@ class UnavailableDatesManager extends Component
             ]);
 
             $this->dates[] = $date->toArray();
-            usort($this->dates, fn($a, $b) => $a['date'] <=> $b['date']);
-            
+            usort($this->dates, fn ($a, $b) => $a['date'] <=> $b['date']);
+
             $this->newDate = '';
             $this->newReason = '';
         } catch (\Exception $e) {
@@ -63,7 +70,7 @@ class UnavailableDatesManager extends Component
             $date = UnavailableDate::find($dateId);
             if ($date) {
                 $date->delete();
-                $this->dates = array_filter($this->dates, fn($d) => $d['id'] !== $dateId);
+                $this->dates = array_filter($this->dates, fn ($d) => $d['id'] !== $dateId);
             }
         } catch (\Exception $e) {
             $this->error = 'Failed to delete date';
