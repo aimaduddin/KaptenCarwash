@@ -1,6 +1,6 @@
 # KaptenCarwash
 
-A modern car wash booking system built with Laravel 11 and Livewire. Features include customer bookings, admin dashboard, calendar view, and payment processing.
+A modern car wash booking system built with Laravel 12 and Livewire. Features include customer bookings, admin dashboard, calendar view, and payment processing.
 
 ## Features
 
