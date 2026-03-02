@@ -1,5 +1,5 @@
 [phases.setup]
-nixPkgs = ["php", "php82Packages.composer", "git"]
+nixPkgs = ["git"]
 
 [phases.build]
 nixPkgs = ["nodejs_20", "php", "php82Packages.composer"]
