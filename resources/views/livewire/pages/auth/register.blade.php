@@ -11,8 +11,11 @@ use Livewire\Volt\Component;
 new #[Layout('layouts.guest')] class extends Component
 {
     public string $name = '';
+
     public string $email = '';
+
     public string $password = '';
+
     public string $password_confirmation = '';
 
     /**
@@ -75,12 +78,12 @@ new #[Layout('layouts.guest')] class extends Component
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}" wire:navigate>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-6 gap-4">
+            <a class="underline text-sm text-slate-400 hover:text-cyan-500 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 focus:ring-offset-slate-900 transition-colors text-center sm:text-left" href="{{ route('login') }}" wire:navigate>
                 {{ __('Already registered?') }}
             </a>
 
-            <x-primary-button class="ms-4">
+            <x-primary-button class="w-full sm:w-auto">
                 {{ __('Register') }}
             </x-primary-button>
         </div>

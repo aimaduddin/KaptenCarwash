@@ -2,16 +2,25 @@
 
 namespace App\Services;
 
-use App\Models\Booking;
 use App\Enums\BookingStatus;
+use App\Models\Booking;
 use Carbon\Carbon;
 
 class AvailabilityService
 {
     public static function generateTimeSlots(string $date, array $config): array
     {
-        $start = Carbon::parse("{$date} {$config['business_hour_start']}");
-        $end = Carbon::parse("{$date} {$config['business_hour_end']}");
+        try {
+            $start = Carbon::createFromFormat('Y-m-d H:i', $date.' '.$config['business_hour_start']);
+            $end = Carbon::createFromFormat('Y-m-d H:i', $date.' '.$config['business_hour_end']);
+        } catch (\Throwable) {
+            return [];
+        }
+
+        if (! $start || ! $end) {
+            return [];
+        }
+
         $slotDuration = $config['slot_duration_minutes'];
 
         $slots = [];

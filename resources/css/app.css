@@ -4,6 +4,7 @@
   --color-slate-50: #f8fafc;
   --color-slate-950: #020617;
   --color-cyan-500: #06b6d4;
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {
@@ -19,16 +20,12 @@
 
 @layer components {
   .pb-safe {
-    padding-bottom: env(safe-area-inset-bottom, 0);
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 1.5rem));
   }
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-
   body {
-    @apply bg-slate-950 text-foreground antialiased;
+    @apply bg-slate-950 text-slate-50 antialiased font-sans;
   }
 }

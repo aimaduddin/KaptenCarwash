@@ -1,6 +1,4 @@
 <div class="p-6">
-    <h1 class="text-2xl font-bold text-slate-50 mb-6">Service Pricing</h1>
-    
     <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 overflow-x-auto">
         <table class="min-w-full divide-y divide-slate-800">
             <thead>
@@ -40,22 +38,37 @@
     </div>
     
     @if ($editingServiceId)
-        <div class="fixed inset-0 top-1/2 right-0 left-1/2 w-full h-3/4 bg-slate-950/95 backdrop-blur-sm z-50 flex items-center justify-center">
-            <div class="bg-slate-900 rounded-2xl p-8 max-w-md shadow-2xl">
+        <div class="fixed inset-0 bg-slate-950/95 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-slate-900 rounded-2xl p-8 max-w-md shadow-2xl relative w-full max-w-lg">
                 <h2 class="text-xl font-bold text-slate-50 mb-4">
                     Edit: {{ $services->find($editingServiceId)->name }}
                 </h2>
                 
                 <div class="space-y-4">
                     <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Service Name</label>
+                        <input type="text" wire:model.live="newName"
+                               class="w-full p-3 bg-slate-900 border border-slate-800 rounded-lg text-slate-50 focus:ring-2 focus:ring-cyan-500 focus:ring-offset-1"
+                               placeholder="e.g., Clay Bar Treatment">
+                    </div>
+
+                    <div>
                         <label class="block text-sm font-medium text-slate-300 mb-2">Price (RM)</label>
-                        <input type="number" wire:model.live="newPrice" step="0.01" min="100"
+                        <input type="number" wire:model.live="newPrice" step="0.01" min="10"
                                class="w-full p-3 bg-slate-900 border border-slate-800 rounded-lg text-slate-50 focus:ring-2 focus:ring-cyan-500 focus:ring-offset-1">
                     </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Duration (minutes)</label>
+                        <input type="number" wire:model.live="newDuration" min="5"
+                               class="w-full p-3 bg-slate-900 border border-slate-800 rounded-lg text-slate-50 focus:ring-2 focus:ring-cyan-500 focus:ring-offset-1"
+                               placeholder="e.g., 30">
+                    </div>
                     
-                    <label class="block text-sm font-medium text-slate-300 mb-2">Active Status</label>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Active Status</label>
                         <div class="flex items-center gap-2">
-                            <button wire:click="toggleActive({{ $service->id }})"
+                            <button wire:click="toggleActive"
                                     class="{{ $newActive ? 'bg-green-600 text-white' : 'bg-slate-700 text-slate-50' }} px-4 py-2 rounded-lg transition-colors">
                                 @if ($newActive)
                                     ✓ Active
@@ -67,15 +80,16 @@
                     </div>
                     
                     <div class="flex gap-3">
-                        <button wire:click="savePrice"
+                        <button type="button" wire:click="savePrice"
                                 class="px-6 py-3 bg-cyan-500 text-white font-semibold rounded-lg hover:bg-cyan-600">
                                 Save
                         </button>
-                        <button wire:click="cancelEditing"
+                        <button type="button" wire:click="cancelEditing"
                                 class="px-6 py-3 bg-slate-700 text-slate-50 font-medium rounded-lg hover:bg-slate-600">
                                 Cancel
                         </button>
                     </div>
+                </div>
             </div>
         </div>
     @endif

@@ -8,9 +8,16 @@ use Livewire\Component;
 class ServicePricingTable extends Component
 {
     public $services;
+
     public $editingServiceId = null;
+
     public $newPrice = '';
+
     public $newActive = false;
+
+    public $newName = '';
+
+    public $newDuration = '';
 
     public function mount(): void
     {
@@ -21,7 +28,9 @@ class ServicePricingTable extends Component
     {
         $this->editingServiceId = $serviceId;
         $service = Service::find($serviceId);
-        $this->newPrice = $service->base_price;
+        $this->newName = $service->name;
+        $this->newPrice = $service->base_price / 100;
+        $this->newDuration = $service->duration_minutes;
         $this->newActive = $service->is_active;
     }
 
@@ -30,38 +39,47 @@ class ServicePricingTable extends Component
         $this->editingServiceId = null;
         $this->newPrice = '';
         $this->newActive = false;
+        $this->newName = '';
+        $this->newDuration = '';
+    }
+
+    public function toggleActive(): void
+    {
+        $this->newActive = ! $this->newActive;
     }
 
     public function savePrice(): void
     {
-        $this->validate();
+        if (! $this->editingServiceId) {
+            return;
+        }
+
+        if (! is_numeric($this->newPrice) || $this->newPrice < 10) {
+            session()->flash('error', 'Price must be at least RM 10');
+
+            return;
+        }
+
+        if (empty($this->newName)) {
+            session()->flash('error', 'Service name is required');
+
+            return;
+        }
+
+        if (! is_numeric($this->newDuration) || $this->newDuration < 5) {
+            session()->flash('error', 'Duration must be at least 5 minutes');
+
+            return;
+        }
 
         $service = Service::find($this->editingServiceId);
+        $service->name = $this->newName;
         $service->base_price = (int) ($this->newPrice * 100);
+        $service->duration_minutes = (int) $this->newDuration;
         $service->is_active = $this->newActive;
         $service->save();
 
-        $this->cancelEditing();
-    }
-
-    public function toggleActive($serviceId): void
-    {
-        $service = Service::find($serviceId);
-        $service->is_active = !$service->is_active;
-        $service->save();
-
         $this->services = Service::orderBy('name')->get();
-    }
-
-    protected function validate(): void
-    {
-        if (!$this->editingServiceId) {
-            return;
-        }
-
-        if (!is_numeric($this->newPrice) || $this->newPrice < 100) {
-            session()->flash('error', 'Price must be at least RM 100');
-            return;
-        }
+        $this->cancelEditing();
     }
 }

@@ -10,10 +10,12 @@ use Livewire\Component;
 class KanbanBoard extends Component
 {
     public $todayDate;
+
     public $activeTab = 'confirmed';
+
     public $columns = [
         'confirmed' => [],
-        'inProgress' => [],
+        'in_progress' => [],
         'completed' => [],
     ];
 
@@ -25,16 +27,16 @@ class KanbanBoard extends Component
 
     public function loadBookings(): void
     {
-        $bookings = Booking::with(['user', 'carType'])
+        $bookings = Booking::with(['user', 'carType', 'services'])
             ->where('booking_date', $this->todayDate)
             ->where('booking_status', '!=', BookingStatus::CANCELLED)
             ->orderBy('booking_time')
             ->get();
 
         $this->columns = [
-            'confirmed' => $bookings->filter(fn ($b) => $b->booking_status->value === BookingStatus::CONFIRMED)->values(),
-            'inProgress' => $bookings->filter(fn ($b) => $b->booking_status->value === BookingStatus::IN_PROGRESS)->values(),
-            'completed' => $bookings->filter(fn ($b) => $b->booking_status->value === BookingStatus::COMPLETED)->values(),
+            'confirmed' => $bookings->filter(fn ($b) => $b->booking_status === BookingStatus::CONFIRMED)->values(),
+            'in_progress' => $bookings->filter(fn ($b) => $b->booking_status === BookingStatus::IN_PROGRESS)->values(),
+            'completed' => $bookings->filter(fn ($b) => $b->booking_status === BookingStatus::COMPLETED)->values(),
         ];
     }
 
@@ -48,7 +50,7 @@ class KanbanBoard extends Component
         $booking = Booking::find($bookingId);
         $booking->booking_status = BookingStatus::from($newStatus);
         $booking->save();
-        
+
         $this->loadBookings();
     }
 }

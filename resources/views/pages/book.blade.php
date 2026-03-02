@@ -1,3 +1,7 @@
-<x-layouts.app title="Book Appointment">
+@extends('layouts.app')
+
+@section('title', 'Book Appointment')
+
+@section('content')
     <livewire:booking-wizard />
-</x-layouts.app>
+@endsection

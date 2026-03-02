@@ -8,64 +8,80 @@ use Livewire\Component;
 
 class Calendar extends Component
 {
-    public $currentMonth;
-    public $currentYear;
+    public int $currentMonth;
+
+    public int $currentYear;
+
     public $bookings = [];
-    public $selectedDate = null;
+
+    public ?string $selectedDate = null;
+
     public $selectedDateBookings = [];
+
+    public array $bookingsByDate = [];
 
     public function mount(): void
     {
         $this->currentMonth = Carbon::now()->month;
         $this->currentYear = Carbon::now()->year;
         $this->loadBookings();
+        $this->selectDate(Carbon::now()->format('Y-m-d'));
     }
 
     public function loadBookings(): void
     {
-        $startDate = Carbon::create($this->currentYear, $this->currentMonth, 1)->startOfMonth();
+        $startDate = Carbon::createFromDate($this->currentYear, $this->currentMonth, 1)->startOfMonth();
         $endDate = $startDate->copy()->endOfMonth();
-        
-        $this->bookings = Booking::whereBetween('booking_date', $startDate, $endDate)
+
+        $this->bookings = Booking::whereBetween('booking_date', [$startDate, $endDate])
             ->where('booking_status', '!=', 'CANCELLED')
             ->orderBy('booking_date')
             ->orderBy('booking_time')
             ->get();
+
+        $this->bookingsByDate = $this->bookings->groupBy(function ($booking) {
+            return $booking->booking_date->format('Y-m-d');
+        })->map->count()->toArray();
     }
 
     public function previousMonth(): void
     {
-        $this->currentMonth->subMonth();
-        if ($this->currentMonth < 1) {
+        if ($this->currentMonth === 1) {
+            $this->currentMonth = 12;
             $this->currentYear--;
         } else {
-            $this->currentYear--;
-            }
-        
+            $this->currentMonth--;
+        }
+
         $this->loadBookings();
     }
 
     public function nextMonth(): void
     {
-        $this->currentMonth->addMonth();
-        if ($this->currentMonth > 12) {
+        if ($this->currentMonth === 12) {
+            $this->currentMonth = 1;
             $this->currentYear++;
         } else {
-            $this->currentYear++;
+            $this->currentMonth++;
         }
-        
+
         $this->loadBookings();
     }
 
-    public function selectDate($date): void
+    public function selectDate(string $date): void
     {
         $this->selectedDate = $date;
-        $this->loadDateBookings($date);
-    }
+        $this->selectedDateBookings = Booking::with(['user', 'carType'])
+            ->where('booking_date', $date)
+            ->get();
     }
 
-    public function loadDateBookings($date): void
+    public function render()
     {
-        $this->selectedDateBookings = Booking::where('booking_date', $this->selectedDate)->get();
+        if (empty($this->bookings)) {
+            $this->loadBookings();
+        }
+
+        return view('livewire.admin.calendar');
     }
 }
