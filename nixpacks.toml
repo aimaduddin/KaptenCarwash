@@ -2,7 +2,7 @@
 nixPkgs = ["git"]
 
 [phases.build]
-nixPkgs = ["nodejs_20", "php", "php82Packages.composer"]
+nixPkgs = ["nodejs_20", "php84", "php84Packages.composer"]
 
 [phases.install]
 cmds = ["composer install --no-dev --optimize-autoloader", "npm ci", "npm run build"]
