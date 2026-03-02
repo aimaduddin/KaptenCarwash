@@ -156,6 +156,46 @@ npm run dev
 
 See `DEPLOYMENT-CHECKLIST.md` for deployment preparation.
 
+### Deploy on Coolify (Nixpacks)
+
+This repository includes `nixpacks.toml` configured for Laravel + Vite builds.
+
+Use these settings in Coolify:
+
+- **Build Pack:** Nixpacks
+- **Port:** `8080` (or keep default and let Coolify map it)
+- **Start Command:** leave empty (already defined in `nixpacks.toml`)
+- **Base Directory:** repository root
+
+Recommended environment variables in Coolify:
+
+```env
+APP_NAME=KaptenCarwash
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://your-domain.com
+APP_KEY=base64:your_generated_app_key
+
+DB_CONNECTION=pgsql
+DB_HOST=your-db-host
+DB_PORT=5432
+DB_DATABASE=your-db-name
+DB_USERNAME=your-db-user
+DB_PASSWORD=your-db-password
+```
+
+Generate `APP_KEY` locally if needed:
+
+```bash
+php artisan key:generate --show
+```
+
+Recommended post-deploy command in Coolify:
+
+```bash
+php artisan migrate --force && php artisan optimize:clear && php artisan optimize && php artisan storage:link
+```
+
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
